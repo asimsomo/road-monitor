@@ -90,11 +90,21 @@ named places rather than every matching way, so roads come back truncated
 ## Tests
 
 ```sh
-node --test scripts/geometry.test.mjs
+node --test scripts/geometry.test.mjs js/classify.test.mjs
 ```
 
-Covers the stitching and measurement helpers — shuffled and reversed fragments,
-disconnected fragments, along-the-road midpoints, distance accuracy.
+`geometry.test.mjs` covers stitching and measurement — shuffled and reversed
+fragments, disconnected fragments, along-the-road midpoints, distance accuracy.
+
+`classify.test.mjs` covers the rule itself, including the rain branch. That
+branch matters disproportionately: Bay Area forecasts are dry from roughly May
+to October, so `wet` can go months without executing against live data — as of
+this writing all 364 forecast cells (52 roads x 7 days) read 0.00" with a peak
+probability of 3%. It is only tested because it is tested here.
+
+The tests also pin a subtlety: the rule compares the **rounded** high, because
+that is what the UI displays. Comparing the raw value meant a 64.6F road showed
+"65°" while being coloured blue for falling below the 65F floor.
 
 ## Running locally
 

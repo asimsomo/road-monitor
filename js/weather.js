@@ -1,7 +1,7 @@
 // Talks to Open-Meteo, which is free, needs no API key and sends CORS headers —
 // so the browser can call it directly and the site stays a pure static deploy.
 //
-// All 23 roads go out in one request: Open-Meteo accepts comma-separated
+// Every road goes out in one request: Open-Meteo accepts comma-separated
 // coordinate lists and answers with one object per location, in order.
 
 import { RULE, FORECAST_DAYS } from './config.js';
@@ -13,8 +13,13 @@ const CACHE_MS = 60 * 60 * 1000; // an hour; the forecast does not move faster
 export function classify(day, rule = RULE) {
   if (day == null) return 'unknown';
   if (day.precip >= rule.rainMax) return 'wet';
-  if (day.high < rule.tempMin) return 'cold';
-  if (day.high > rule.tempMax) return 'hot';
+
+  // Compare the rounded high, because that is what the UI shows. Testing the
+  // raw value instead meant a 64.6F road displayed "65°" and was coloured blue
+  // for being too cold, which reads as a bug to anyone looking at it.
+  const high = Math.round(day.high);
+  if (high < rule.tempMin) return 'cold';
+  if (high > rule.tempMax) return 'hot';
   return 'good';
 }
 
