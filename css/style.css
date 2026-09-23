@@ -1,0 +1,401 @@
+:root {
+  --bg: #0d0f12;
+  --card: rgba(20, 23, 28, 0.92);
+  --card-solid: #14171c;
+  --line: rgba(255, 255, 255, 0.11);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --text: #eef1f5;
+  --muted: #9aa3ae;
+  --faint: #6b7480;
+
+  --good: #4ade80;
+  --cold: #60a5fa;
+  --hot: #fb923c;
+  --wet: #a78bfa;
+
+  --radius: 10px;
+  --shadow: 0 6px 26px rgba(0, 0, 0, 0.55);
+  --strip-h: 132px;
+
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+#map { position: absolute; inset: 0 0 var(--strip-h) 0; background: var(--bg); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ── Floating cards ───────────────────────────────────────────────────────── */
+
+.card {
+  position: absolute;
+  z-index: 500;
+  background: var(--card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.brand { top: 14px; left: 14px; padding: 12px 16px 13px; max-width: 290px; }
+
+.brand h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.brand p {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.basemaps { top: 96px; left: 14px; display: flex; padding: 3px; gap: 2px; }
+
+.basemaps button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 550;
+  padding: 6px 13px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.basemaps button:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
+.basemaps button.is-active { color: #0d0f12; background: var(--text); }
+
+.icon-button {
+  appearance: none;
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.12s, background 0.12s;
+}
+
+.icon-button:hover { color: var(--text); }
+.icon-button.ghost {
+  position: static;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  width: 28px; height: 28px;
+  font-size: 20px;
+  border-radius: 6px;
+}
+.icon-button.ghost:hover { background: rgba(255, 255, 255, 0.07); }
+
+#roads-toggle { top: 14px; right: 14px; }
+#roads-toggle[aria-expanded="true"] { display: none; }
+
+/* ── Road list ────────────────────────────────────────────────────────────── */
+
+.roadlist {
+  top: 14px;
+  right: 14px;
+  width: 296px;
+  max-height: calc(100vh - var(--strip-h) - 28px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.roadlist[hidden] { display: none; }
+
+.roadlist-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 10px 11px 15px;
+  border-bottom: 1px solid var(--line);
+}
+
+.roadlist-head h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+#roadlist-day { color: var(--faint); font-weight: 450; }
+
+.roadlist ol {
+  margin: 0;
+  padding: 5px;
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.road-row {
+  display: grid;
+  grid-template-columns: 3px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.road-row:hover { background: rgba(255, 255, 255, 0.055); }
+
+.road-row .bar { width: 3px; height: 26px; border-radius: 2px; background: var(--faint); }
+.road-row .nm { font-size: 13px; font-weight: 520; line-height: 1.25; }
+.road-row .sub { font-size: 11px; color: var(--faint); margin-top: 1px; }
+.road-row .tmp { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+.road-row.is-good .nm { color: var(--good); }
+
+.roadlist-foot {
+  margin: 0;
+  padding: 9px 15px 11px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--faint);
+  line-height: 1.4;
+}
+
+.roadlist-foot b { color: var(--muted); font-weight: 600; }
+
+/* ── Legend ───────────────────────────────────────────────────────────────── */
+
+.legend {
+  left: 14px;
+  bottom: calc(var(--strip-h) + 14px);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.legend[hidden] { display: none; }
+
+.swatch {
+  width: 11px; height: 3px;
+  border-radius: 2px;
+  margin-left: 6px;
+}
+.legend .swatch:first-child { margin-left: 0; }
+.swatch.good { background: var(--good); }
+.swatch.cold { background: var(--cold); }
+.swatch.hot  { background: var(--hot); }
+.swatch.wet  { background: var(--wet); }
+
+/* ── Day strip ────────────────────────────────────────────────────────────── */
+
+.daystrip {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: var(--strip-h);
+  z-index: 600;
+  background: var(--card-solid);
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+}
+
+.daystrip-status {
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.daystrip-status.is-error { color: var(--hot); }
+.daystrip-status[hidden] { display: none; }
+
+.daystrip-days {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.daystrip-days[hidden] { display: none; }
+
+.day {
+  position: relative;
+  width: 100%;
+  padding: 11px 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.022);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.14s, border-color 0.14s, transform 0.14s;
+}
+
+.day:hover { background: rgba(255, 255, 255, 0.06); border-color: var(--line-strong); }
+.day.is-selected { border-color: var(--text); background: rgba(255, 255, 255, 0.08); }
+
+.day::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--faint);
+}
+.day.rank-great::before { background: var(--good); }
+.day.rank-some::before  { background: var(--hot); }
+.day.rank-none::before  { background: var(--wet); }
+
+.day .dow {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.day.is-selected .dow { color: var(--text); }
+
+.day .date { font-size: 11px; color: var(--faint); margin-top: 1px; }
+
+.day .count {
+  margin-top: 9px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.day.rank-great .count { color: var(--good); }
+.day.rank-none .count { color: var(--faint); }
+
+.day .meta {
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+}
+
+/* ── Leaflet overrides ────────────────────────────────────────────────────── */
+
+.leaflet-container { background: var(--bg); font-family: var(--sans); }
+.leaflet-control-attribution {
+  background: rgba(13, 15, 18, 0.8) !important;
+  color: var(--faint) !important;
+  font-size: 10px !important;
+}
+.leaflet-control-attribution a { color: var(--muted) !important; }
+.leaflet-control-zoom { border: 1px solid var(--line) !important; box-shadow: var(--shadow) !important; }
+.leaflet-control-zoom a {
+  background: var(--card-solid) !important;
+  color: var(--muted) !important;
+  border-color: var(--line) !important;
+}
+.leaflet-control-zoom a:hover { color: var(--text) !important; }
+
+.leaflet-popup-content-wrapper {
+  background: var(--card-solid);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.leaflet-popup-tip { background: var(--card-solid); border: 1px solid var(--line); }
+.leaflet-popup-content { margin: 13px 15px; width: 252px !important; }
+.leaflet-container a.leaflet-popup-close-button { color: var(--faint); }
+.leaflet-container a.leaflet-popup-close-button:hover { color: var(--text); }
+
+/* ── Popup body ───────────────────────────────────────────────────────────── */
+
+.pop h3 { margin: 0; font-size: 14.5px; font-weight: 620; letter-spacing: -0.01em; }
+.pop .pop-sub { margin: 3px 0 0; font-size: 11px; color: var(--faint); }
+.pop .pop-blurb { margin: 8px 0 0; font-size: 12px; line-height: 1.45; color: var(--muted); }
+
+.pop table { width: 100%; margin-top: 11px; border-collapse: collapse; font-size: 11.5px; }
+.pop th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.pop th:not(:first-child), .pop td:not(:first-child) { text-align: right; }
+.pop td { padding: 3px 0; font-family: var(--mono); color: var(--muted); }
+.pop td:first-child { font-family: var(--sans); }
+.pop tr.is-good td { color: var(--good); }
+.pop tr.is-selected td { background: rgba(255, 255, 255, 0.05); }
+
+/* ── Small screens ────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  :root { --strip-h: 122px; }
+
+  .brand { max-width: none; right: 66px; padding: 10px 13px 11px; }
+  .brand h1 { font-size: 16px; }
+  .brand p { display: none; }
+
+  .basemaps { top: 66px; left: 14px; }
+  .legend { display: none; }
+
+  .roadlist {
+    top: auto;
+    left: 14px;
+    right: 14px;
+    bottom: calc(var(--strip-h) + 14px);
+    width: auto;
+    max-height: 52vh;
+  }
+
+  .daystrip { padding: 0 8px; }
+  .daystrip-days { gap: 5px; }
+  .day { padding: 9px 5px 10px; text-align: center; }
+  .day .date, .day .meta { display: none; }
+  .day .count { margin-top: 6px; font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

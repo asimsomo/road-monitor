@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Road Monitor — Bay Area touge, scored by the weather</title>
+<meta name="description" content="Bay Area mountain roads on a map, scored against the week's forecast. Finds the days with no rain and highs between 65 and 80°F.">
+
+<meta property="og:title" content="Road Monitor">
+<meta property="og:description" content="Bay Area mountain roads, scored against the week's forecast.">
+<meta property="og:type" content="website">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛣️</text></svg>">
+
+<link rel="preconnect" href="https://api.open-meteo.com">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="map" role="application" aria-label="Map of Bay Area driving roads"></div>
+
+<header class="card brand">
+  <h1>Road&nbsp;Monitor</h1>
+  <p>Bay Area touge, scored against the week's forecast.</p>
+</header>
+
+<nav class="card basemaps" aria-label="Base map style">
+  <button type="button" data-basemap="touge" class="is-active">Touge</button>
+  <button type="button" data-basemap="satellite">Satellite</button>
+  <button type="button" data-basemap="terrain">Terrain</button>
+</nav>
+
+<button type="button" id="roads-toggle" class="card icon-button" aria-expanded="false"
+        aria-controls="roadlist" title="Show road list">
+  <span aria-hidden="true">☰</span>
+  <span class="sr-only">Show road list</span>
+</button>
+
+<aside class="card roadlist" id="roadlist" hidden>
+  <div class="roadlist-head">
+    <h2>Roads <span id="roadlist-day"></span></h2>
+    <button type="button" id="roads-close" class="icon-button ghost" title="Hide road list">
+      <span aria-hidden="true">×</span><span class="sr-only">Hide road list</span>
+    </button>
+  </div>
+  <ol id="roadlist-items"></ol>
+  <p class="roadlist-foot">
+    Rule: no rain, high between <b id="rule-min">65</b>–<b id="rule-max">80</b>°F.
+  </p>
+</aside>
+
+<footer class="daystrip" id="daystrip" aria-label="Seven day forecast">
+  <div class="daystrip-status" id="daystrip-status">Loading the week's forecast…</div>
+  <ol class="daystrip-days" id="daystrip-days"></ol>
+</footer>
+
+<div class="card legend" id="legend" hidden>
+  <span class="swatch good"></span>Good drive
+  <span class="swatch cold"></span>Too cold
+  <span class="swatch hot"></span>Too hot
+  <span class="swatch wet"></span>Rain
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
