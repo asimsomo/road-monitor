@@ -37,6 +37,7 @@ export const ROADS = [
     region: 'Peninsula',
     blurb: 'Fast, flowing and wide by local standards. Woodside to the coast.',
     match: { ref: 'CA 84' },
+    searchNames: ['La Honda Road', 'Woodside Road'],
     bbox: [37.22, -122.40, 37.50, -122.17],
   },
   {
@@ -61,6 +62,7 @@ export const ROADS = [
     region: 'Peninsula',
     blurb: 'The ridge road. Long sweepers along the spine of the peninsula.',
     match: { ref: 'CA 35' },
+    searchNames: ['Skyline Boulevard'],
     bbox: [37.15, -122.38, 37.55, -122.08],
   },
   {
@@ -69,6 +71,7 @@ export const ROADS = [
     region: 'Santa Cruz Mtns',
     blurb: 'Congress Springs. Steady rhythm from Saratoga up to the ridge.',
     match: { ref: 'CA 9' },
+    searchNames: ['Congress Springs Road', 'Big Basin Way'],
     bbox: [37.22, -122.16, 37.32, -122.01],
   },
   {
@@ -77,6 +80,7 @@ export const ROADS = [
     region: 'Santa Cruz Mtns',
     blurb: 'The southern run through Boulder Creek and Felton.',
     match: { ref: 'CA 9' },
+    searchNames: ['Highway 9', 'Big Basin Way'],
     bbox: [37.03, -122.16, 37.22, -122.00],
   },
   {
