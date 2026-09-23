@@ -113,6 +113,29 @@ export function stitch(ways) {
   return lines.sort((a, b) => lengthMi(b) - lengthMi(a));
 }
 
+
+// Overpass returns every way matching the name inside the bbox, and the Bay
+// Area has more than one "Alpine Road". Stitching joins what physically
+// connects, but two roads that merely share a name stay as separate chains and
+// would otherwise be presented as one road.
+//
+// So: drop stubs, then keep a single run. `anchor` disambiguates when the
+// longest chain is not the intended one (a coordinate known to sit on the road
+// we actually mean); otherwise the longest chain wins.
+export function selectLines(lines, road) {
+  const real = lines.filter((l) => lengthMi(l) >= (road.minSegmentMi ?? 1));
+  const candidates = real.length ? real : lines;
+  if (!candidates.length) return [];
+
+  if (road.anchor) {
+    const nearest = (line) =>
+      Math.min(...line.map((p) => haversineMi(p, road.anchor)));
+    return [candidates.reduce((best, l) => (nearest(l) < nearest(best) ? l : best))];
+  }
+
+  return [candidates.reduce((best, l) => (lengthMi(l) > lengthMi(best) ? l : best))];
+}
+
 export function lengthMi(line) {
   let total = 0;
   for (let i = 1; i < line.length; i++) total += haversineMi(line[i - 1], line[i]);
@@ -226,10 +249,11 @@ async function main() {
         continue;
       }
 
-      // Drop stubs: driveways and slip roads that share the name add noise.
-      const lines = stitch(ways)
-        .map((l) => l.map(([lat, lon]) => [round(lat), round(lon)]))
-        .filter((l) => lengthMi(l) > 0.15);
+      // Drop stubs and unrelated same-named roads; keep the intended run.
+      const lines = selectLines(
+        stitch(ways).map((l) => l.map(([lat, lon]) => [round(lat), round(lon)])),
+        road
+      );
 
       if (!lines.length) {
         console.log('ALL FRAGMENTS TOO SHORT');

@@ -136,7 +136,7 @@ function openRoad(road) {
   const html = `<div class="pop">
     <h3>${road.name}</h3>
     <p class="pop-sub">${road.region} · ${road.miles} mi</p>
-    <p class="pop-blurb">${road.blurb}</p>
+    ${road.blurb ? `<p class="pop-blurb">${road.blurb}</p>` : ''}
     ${table}
   </div>`;
 

@@ -3,3 +3,4 @@ node_modules/
 *.log
 data/fetch.log
 data/roads.nominatim.json
+data/source.kmz
