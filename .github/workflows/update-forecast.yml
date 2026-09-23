@@ -1,0 +1,66 @@
+name: Update calendar feed
+
+# The forecast moves daily, so the committed .ics would go stale within a day
+# of being published. This regenerates it and commits only when it changed.
+#
+# No credentials: the feed is a static file, and subscribers read it over
+# HTTPS. The only token involved is the automatic GITHUB_TOKEN.
+
+on:
+  schedule:
+    # 13:10 UTC — early morning in California, after the overnight model runs.
+    # Deliberately not on the hour: GitHub's scheduler is busiest then and
+    # delays cron jobs accordingly.
+    - cron: '10 13 * * *'
+  workflow_dispatch: # lets you trigger a refresh by hand
+
+# Intentionally not triggered on push: this workflow commits, and committing on
+# push would have it retrigger itself.
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-forecast
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The rule that decides what lands in the calendar is tested, so a
+      # regression stops the feed rather than quietly publishing bad days.
+      - name: Test
+        run: npm test
+
+      - name: Rebuild the feed
+        run: node scripts/build-ics.mjs
+
+      - name: Commit if it changed
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          # DTSTAMP changes every run, so comparing the whole file would commit
+          # daily regardless. Compare everything else, and skip if only the
+          # timestamp moved.
+          if git diff --quiet -- road-monitor.ics; then
+            echo 'Feed unchanged.'
+            exit 0
+          fi
+
+          if [ -z "$(git diff -U0 -- road-monitor.ics | grep -E '^[+-][^+-]' | grep -v DTSTAMP)" ]; then
+            echo 'Only DTSTAMP moved; not committing.'
+            git checkout -- road-monitor.ics
+            exit 0
+          fi
+
+          git add road-monitor.ics
+          git commit -m 'Update calendar feed'
+          git push

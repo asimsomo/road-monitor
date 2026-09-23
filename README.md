@@ -40,6 +40,53 @@ A road is a **good drive** on a given day when:
 Thresholds live in [`js/config.js`](js/config.js). Roads are coloured green for
 good, blue for too cold, orange for too hot, purple for rain.
 
+## Calendar feed
+
+A subscribable calendar of good driving days:
+
+```
+https://asimsomo.github.io/road-monitor/road-monitor.ics
+```
+
+Google Calendar → *Other calendars* → **+** → *From URL* → paste. Apple
+Calendar → *File* → *New Calendar Subscription*.
+
+Events are **areas, not individual roads** — you do not drive to a region for
+one road. An area earns an all-day event when at least **75%** of its roads
+qualify that day:
+
+| Area | Roads | Needs |
+| --- | --- | --- |
+| North Bay | 5 | 4 |
+| Northeast Bay | 5 | 4 |
+| Southeast Bay | 7 | 6 |
+| Peninsula | 34 | 26 |
+
+Membership lives in [`scripts/areas.config.mjs`](scripts/areas.config.mjs) and
+is listed explicitly rather than derived from coordinates. A lat/lon rule looks
+tidier but misfiles the awkward cases — Mines Rd straddles the Palomares
+boundary, Del Puerto Canyon runs east into the Central Valley — and would
+silently absorb a new road instead of prompting a decision. `validateAreas()`
+fails the build if the areas and `roads.json` drift apart. Hecker Pass Rd is on
+the map but outside scoring: it fits none of the four areas cleanly.
+
+Scoring by area earns its keep on mixed days. On 27 Sep 2026 the North Bay ran
+5/5 and the Southeast Bay 6/7 — both worth driving — while the Peninsula was
+16/34 and the Northeast Bay 1/5. A single Bay-Area-wide verdict would have been
+wrong for most of the map.
+
+The feed is regenerated daily by
+[`.github/workflows/update-forecast.yml`](.github/workflows/update-forecast.yml)
+and committed. No credentials anywhere: it is a static file served over HTTPS,
+and the only token involved is the automatic `GITHUB_TOKEN`. Note that Google
+refreshes subscribed calendars on its own schedule — often around 24 hours —
+so the feed is fresher than your calendar will be.
+
+```sh
+node scripts/build-ics.mjs --dry-run   # print the area table, write nothing
+node scripts/build-ics.mjs             # write road-monitor.ics
+```
+
 ## Rebuilding the road data
 
 Road geometry is committed, so the published site never calls anything at

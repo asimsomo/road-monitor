@@ -1,0 +1,13 @@
+{
+  "name": "road-monitor",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Bay Area driving roads scored against the week's weather",
+  "scripts": {
+    "test": "node --test scripts/geometry.test.mjs js/classify.test.mjs",
+    "build:roads": "node scripts/fetch-roads-kml.mjs",
+    "build:ics": "node scripts/build-ics.mjs"
+  },
+  "license": "MIT"
+}
