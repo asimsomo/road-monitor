@@ -8,6 +8,7 @@
 //   node scripts/fetch-roads.mjs page-mill  # just one, for iterating
 
 import { writeFile, mkdir } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 import { ROADS } from './roads.config.mjs';
 
 // Mirrors, fastest first. Must be planet-wide instances — regional mirrors like
@@ -19,7 +20,9 @@ const ENDPOINTS = [
   'https://overpass.kumi.systems/api/interpreter',
   'https://overpass-api.de/api/interpreter',
 ];
-const PAUSE_MS = 1500; // be polite to a free, shared service
+const PAUSE_MS = 3000; // be polite to a free, shared service
+const USER_AGENT =
+  'road-monitor/1.0 (+https://github.com/asimsomo/road-monitor) node-fetch';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -44,7 +47,12 @@ async function overpass(query) {
       try {
         const res = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            // Required. Node's fetch sends no User-Agent of its own, and
+            // Overpass front-ends answer anonymous requests with a flat 406.
+            'User-Agent': USER_AGENT,
+          },
           body: 'data=' + encodeURIComponent(query),
           signal: AbortSignal.timeout(90_000),
         });
@@ -70,7 +78,7 @@ const key = ([lat, lon]) => `${round(lat)},${round(lon)}`;
 
 // Overpass returns a bag of unordered way fragments. Stitch them back into
 // as few continuous lines as possible by walking shared endpoints.
-function stitch(ways) {
+export function stitch(ways) {
   const pending = ways.map((w) => w.geometry.map((g) => [g.lat, g.lon]));
   const lines = [];
 
@@ -105,7 +113,7 @@ function stitch(ways) {
   return lines.sort((a, b) => lengthMi(b) - lengthMi(a));
 }
 
-function lengthMi(line) {
+export function lengthMi(line) {
   let total = 0;
   for (let i = 1; i < line.length; i++) total += haversineMi(line[i - 1], line[i]);
   return total;
@@ -125,7 +133,7 @@ function haversineMi([lat1, lon1], [lat2, lon2]) {
 // The point we ask Open-Meteo about: the midpoint by distance travelled along
 // the longest line, not the average of the coordinates. For a road shaped like
 // a horseshoe the average can land somewhere the road never goes.
-function midpointOf(line) {
+export function midpointOf(line) {
   const half = lengthMi(line) / 2;
   let walked = 0;
   for (let i = 1; i < line.length; i++) {
@@ -142,7 +150,7 @@ function midpointOf(line) {
   return [round(line[0][0]), round(line[0][1])];
 }
 
-function boundsOf(lines) {
+export function boundsOf(lines) {
   const flat = lines.flat();
   const lats = flat.map((p) => p[0]);
   const lons = flat.map((p) => p[1]);
@@ -236,4 +244,8 @@ async function main() {
   }
 }
 
-main();
+// Only run when executed directly; importing this module (for tests) must
+// not kick off a fetch.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
