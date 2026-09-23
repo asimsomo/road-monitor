@@ -10,7 +10,7 @@ REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
 BEGIN:VEVENT
 UID:north-bay-20260925@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260925
 DTEND;VALUE=DATE:20260926
 SUMMARY:Good drive: North Bay (4/5)
@@ -23,7 +23,7 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:northeast-bay-20260925@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260925
 DTEND;VALUE=DATE:20260926
 SUMMARY:Good drive: Northeast Bay (5/5)
@@ -36,7 +36,7 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:peninsula-20260925@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260925
 DTEND;VALUE=DATE:20260926
 SUMMARY:Good drive: Peninsula (27/34)
@@ -55,7 +55,7 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:northeast-bay-20260926@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260926
 DTEND;VALUE=DATE:20260927
 SUMMARY:Good drive: Northeast Bay (5/5)
@@ -68,7 +68,7 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:peninsula-20260926@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260926
 DTEND;VALUE=DATE:20260927
 SUMMARY:Good drive: Peninsula (27/34)
@@ -87,87 +87,61 @@ TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:north-bay-20260927@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260927
 DTEND;VALUE=DATE:20260928
-SUMMARY:Good drive: North Bay (5/5)
-DESCRIPTION:5 of 5 roads in North Bay are good drives.\n\nBunker Loop Line 
- (67F)\nHighway 1 Muir Woods (66F)\nN San Pedro Rd (75F)\nParadise Dr (67F)
- \nSkaggs Springs Raceway (73F)\n\nRule: no rain\, daytime high 65-80F.\nht
- tps://asimsomo.github.io/road-monitor/
+SUMMARY:Good drive: North Bay (4/5)
+DESCRIPTION:4 of 5 roads in North Bay are good drives.\n\nBunker Loop Line 
+ (65F)\nN San Pedro Rd (71F)\nParadise Dr (65F)\nSkaggs Springs Raceway (77
+ F)\n\nRule: no rain\, daytime high 65-80F.\nhttps://asimsomo.github.io/roa
+ d-monitor/
 URL:https://asimsomo.github.io/road-monitor/
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
 UID:southeast-bay-20260927@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260927
 DTEND;VALUE=DATE:20260928
 SUMMARY:Good drive: Southeast Bay (6/7)
 DESCRIPTION:6 of 7 roads in Southeast Bay are good drives.\n\nCaleveras Rd 
- (70F)\nFelter Rd (70F)\nMines Rd (78F)\nMt. Hamilton Rd. (72F)\nSan Antoni
- o Valley Rd (73F)\nSierra Rd (70F)\n\nRule: no rain\, daytime high 65-80F.
+ (73F)\nFelter Rd (73F)\nMines Rd (79F)\nMt. Hamilton Rd. (75F)\nSan Antoni
+ o Valley Rd (76F)\nSierra Rd (73F)\n\nRule: no rain\, daytime high 65-80F.
  \nhttps://asimsomo.github.io/road-monitor/
 URL:https://asimsomo.github.io/road-monitor/
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:north-bay-20260928@asimsomo.github.io
-DTSTAMP:20260923T174809Z
-DTSTART;VALUE=DATE:20260928
-DTEND;VALUE=DATE:20260929
-SUMMARY:Good drive: North Bay (5/5)
-DESCRIPTION:5 of 5 roads in North Bay are good drives.\n\nBunker Loop Line 
- (70F)\nHighway 1 Muir Woods (68F)\nN San Pedro Rd (77F)\nParadise Dr (70F)
- \nSkaggs Springs Raceway (78F)\n\nRule: no rain\, daytime high 65-80F.\nht
- tps://asimsomo.github.io/road-monitor/
-URL:https://asimsomo.github.io/road-monitor/
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:northeast-bay-20260928@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260928
 DTEND;VALUE=DATE:20260929
 SUMMARY:Good drive: Northeast Bay (5/5)
 DESCRIPTION:5 of 5 roads in Northeast Bay are good drives.\n\nGrizzly Peak 
- Blvd (67F)\nPalomeras Rd (74F)\nPinehurst Rd (76F)\nRedwood Rd (75F)\nWild
+ Blvd (66F)\nPalomeras Rd (76F)\nPinehurst Rd (77F)\nRedwood Rd (76F)\nWild
  cat Canyon Rd (69F)\n\nRule: no rain\, daytime high 65-80F.\nhttps://asims
  omo.github.io/road-monitor/
 URL:https://asimsomo.github.io/road-monitor/
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:southeast-bay-20260928@asimsomo.github.io
-DTSTAMP:20260923T174809Z
-DTSTART;VALUE=DATE:20260928
-DTEND;VALUE=DATE:20260929
-SUMMARY:Good drive: Southeast Bay (7/7)
-DESCRIPTION:7 of 7 roads in Southeast Bay are good drives.\n\nCaleveras Rd 
- (75F)\nDel Puerto Canyon Rd (77F)\nFelter Rd (74F)\nMines Rd (72F)\nMt. Ha
- milton Rd. (75F)\nSan Antonio Valley Rd (76F)\nSierra Rd (73F)\n\nRule: no
-  rain\, daytime high 65-80F.\nhttps://asimsomo.github.io/road-monitor/
-URL:https://asimsomo.github.io/road-monitor/
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
 UID:peninsula-20260928@asimsomo.github.io
-DTSTAMP:20260923T174809Z
+DTSTAMP:20260923T174940Z
 DTSTART;VALUE=DATE:20260928
 DTEND;VALUE=DATE:20260929
-SUMMARY:Good drive: Peninsula (34/34)
-DESCRIPTION:34 of 34 roads in Peninsula are good drives.\n\nAlma Bridge Rd 
- (75F)\nAlpine Rd (73F)\nBear Creek Rd 17 (72F)\nBear Creek Rd 9 (75F)\nBla
- ck Rd (71F)\nBonny Doon Rd (77F)\nDevil's Slide (71F)\nEmpire Grade (75F)\
- nFelton Empire Rd (78F)\nHighway 84 La Honda (74F)\nHighway 84 ws (72F)\nH
- ighway 9 236 (71F)\nHighway 9 Gunsai (74F)\nHighway 9 Saratoga (75F)\nHigh
- way 9 rw (70F)\nJamison Creek Rd (72F)\nKings Mountain Rd (71F)\nLobitos C
- reek Rd (74F)\nMt. Eden Rd (75F)\nOld La Honda Rd (72F)\nPage Mill Rd (73F
- )\nPescadero Road (70F)\nPierce Rd (74F)\nRoute 236 (73F)\nSan Gregorio Rd
-  (71F)\nSkyline 35 (69F)\nSkyline Black (69F)\nSkyline North (68F)\nSkylin
- e South (67F)\nSoda Springs Rd (71F)\nStage Rd (71F)\nSteven's Canyon Rd (
- 75F)\nSteven's Canyon Rd rw (74F)\nTunitas Creek Rd (71F)\n\nRule: no rain
- \, daytime high 65-80F.\nhttps://asimsomo.github.io/road-monitor/
+SUMMARY:Good drive: Peninsula (32/34)
+DESCRIPTION:32 of 34 roads in Peninsula are good drives.\n\nAlma Bridge Rd 
+ (79F)\nAlpine Rd (76F)\nBear Creek Rd 17 (77F)\nBear Creek Rd 9 (79F)\nBla
+ ck Rd (76F)\nDevil's Slide (72F)\nEmpire Grade (79F)\nHighway 84 La Honda 
+ (78F)\nHighway 84 ws (75F)\nHighway 9 236 (75F)\nHighway 9 Gunsai (78F)\nH
+ ighway 9 Saratoga (79F)\nHighway 9 rw (74F)\nJamison Creek Rd (75F)\nKings
+  Mountain Rd (72F)\nLobitos Creek Rd (76F)\nMt. Eden Rd (78F)\nOld La Hond
+ a Rd (74F)\nPage Mill Rd (76F)\nPescadero Road (73F)\nPierce Rd (77F)\nRou
+ te 236 (76F)\nSan Gregorio Rd (74F)\nSkyline 35 (72F)\nSkyline Black (73F)
+ \nSkyline North (70F)\nSkyline South (71F)\nSoda Springs Rd (75F)\nStage R
+ d (73F)\nSteven's Canyon Rd (79F)\nSteven's Canyon Rd rw (78F)\nTunitas Cr
+ eek Rd (72F)\n\nRule: no rain\, daytime high 65-80F.\nhttps://asimsomo.git
+ hub.io/road-monitor/
 URL:https://asimsomo.github.io/road-monitor/
 TRANSP:TRANSPARENT
 END:VEVENT
