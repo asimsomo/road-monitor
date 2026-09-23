@@ -7,7 +7,7 @@
 //   node scripts/fetch-roads.mjs            # all roads
 //   node scripts/fetch-roads.mjs page-mill  # just one, for iterating
 
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { ROADS } from './roads.config.mjs';
 
@@ -160,15 +160,31 @@ export function boundsOf(lines) {
   ];
 }
 
-async function save(roads) {
+const DATA_URL = new URL('../data/roads.json', import.meta.url);
+
+async function loadExisting() {
+  try {
+    const raw = await readFile(DATA_URL, 'utf8');
+    const roads = JSON.parse(raw).roads ?? [];
+    return new Map(roads.map((r) => [r.id, r]));
+  } catch {
+    return new Map(); // first run, or the file is missing/corrupt
+  }
+}
+
+// Merge rather than replace. Overpass is flaky enough that converging on all 23
+// roads takes several passes, and `fetch-roads.mjs page-mill` must not wipe out
+// the twenty-two roads it was not asked to fetch.
+async function save(collected) {
+  const ordered = ROADS.map((r) => collected.get(r.id)).filter(Boolean);
   await mkdir(new URL('../data/', import.meta.url), { recursive: true });
   await writeFile(
-    new URL('../data/roads.json', import.meta.url),
+    DATA_URL,
     JSON.stringify(
       {
         attribution: 'Road geometry © OpenStreetMap contributors (ODbL)',
         generated: new Date().toISOString().slice(0, 10),
-        roads,
+        roads: ordered,
       },
       null,
       1
@@ -177,14 +193,25 @@ async function save(roads) {
 }
 
 async function main() {
-  const only = process.argv.slice(2);
-  const targets = only.length ? ROADS.filter((r) => only.includes(r.id)) : ROADS;
-  if (!targets.length) {
-    console.error(`No roads matched: ${only.join(', ')}`);
-    process.exit(1);
-  }
+  const args = process.argv.slice(2);
+  const missingOnly = args.includes('--missing');
+  const only = args.filter((a) => !a.startsWith('--'));
 
-  const out = [];
+  const collected = await loadExisting();
+
+  let targets = only.length ? ROADS.filter((r) => only.includes(r.id)) : ROADS;
+  if (missingOnly) targets = targets.filter((r) => !collected.has(r.id));
+
+  if (!targets.length) {
+    console.log(
+      missingOnly
+        ? `Nothing missing — all ${collected.size} roads already present.`
+        : `No roads matched: ${only.join(', ')}`
+    );
+    return;
+  }
+  if (collected.size) console.log(`${collected.size} road(s) already on disk.\n`);
+
   const problems = [];
 
   for (const [i, road] of targets.entries()) {
@@ -211,7 +238,7 @@ async function main() {
       }
 
       const miles = lines.reduce((sum, l) => sum + lengthMi(l), 0);
-      out.push({
+      collected.set(road.id, {
         id: road.id,
         name: road.name,
         region: road.region,
@@ -232,11 +259,11 @@ async function main() {
     // Save after every road. Overpass can be slow enough that a whole-run write
     // at the end means a long wait with nothing to look at, and an interrupted
     // run losing everything.
-    await save(out);
+    await save(collected);
     if (i < targets.length - 1) await sleep(PAUSE_MS);
   }
 
-  console.log(`\nWrote ${out.length} roads to data/roads.json`);
+  console.log(`\ndata/roads.json now holds ${collected.size} of ${ROADS.length} roads`);
   if (problems.length) {
     console.log('\nNeeds attention:');
     for (const p of problems) console.log('  - ' + p);
